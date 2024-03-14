@@ -61,6 +61,10 @@ hexadecimal = {
 
 }
 
+class SintaxError(Exception):
+    def __init__(self, mensagem) -> None:
+        self.mensagem = mensagem
+
 def preenche_bits(x: int) -> str:
     return '0' * x
 
@@ -107,36 +111,49 @@ def converteBinario(linha: str) -> str:
         saida += registradores[codigo[1]]
         saida += registradores[codigo[2]]
         saida += registradores[codigo[3]]
-        saida += preenche_bits(16) 
+        saida += preenche_bits(16)
+        tamanho = 4
     elif saida == operadores['maior'] or saida == operadores['igual'] or saida == operadores['menor']:
         saida += '0000'
         saida += registradores[codigo[1]]
         saida += registradores[codigo[2]]
         saida += imediatoBinario(int(codigo[3]), 16)
+        tamanho = 4
     elif saida == operadores['ler'] or saida == operadores['somaFoda'] or saida == operadores['multiplicaFoda']:
         saida += registradores[codigo[1]]
         saida += '0000'
         saida += registradores[codigo[2]]
         saida += preenche_bits(16)
+        tamanho = 3
     elif saida == operadores['fodaSe'] or saida == operadores['lerFoda']:
         saida += registradores[codigo[1]]
         saida += preenche_bits(24)
+        tamanho = 2
     elif saida == operadores['escreverFoda']:
         saida += '0000'
         saida += registradores[codigo[1]]
         saida += preenche_bits(20)
+        tamanho = 2
     elif saida == operadores['vai']:
         saida += imediatoBinario(int(codigo[1]), 28)
+        tamanho = 2
     elif saida == operadores['pega']:
         saida += registradores[codigo[1]]
         saida += imediatoBinario(int(codigo[2]), 24)
+        tamanho = 3
     elif saida == operadores['escrever']:
         saida += '0000'
         saida += registradores[codigo[1]]
         saida += registradores[codigo[2]]
         saida += preenche_bits(16)
+        tamanho = 3
     else:
         saida += preenche_bits(28)
+        tamanho = 1
+
+    if tamanho < len(codigo):
+        if codigo[tamanho][:2] != '//':
+            raise SintaxError('Erro de sintaxe')
     
     return saida
 
@@ -162,9 +179,13 @@ try:
                     i += 1
 
                 print("Arquivo escrito com sucesso!!")
-            except KeyError:
+            except (KeyError, SintaxError, IndexError):
                 linha = linha.replace('\n', '')
+                linha = linha.replace('Â', '')
                 print(f'Erro de sintaxe na linha {i}: \'\033[31m{linha}\033[0m\'.')
+                escrever.close()
+                with open(saida, 'w') as escrever:
+                    pass
                 
         escrever.close()
         ler.close()
