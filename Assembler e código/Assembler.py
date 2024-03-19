@@ -183,6 +183,7 @@ try:
                 linha = linha.replace('\n', '')
                 linha = linha.replace('Â', '')
                 print(f'Erro de sintaxe na linha {i}: \'\033[31m{linha}\033[0m\'.')
+                
                 escrever.close()
                 with open(saida, 'w') as escrever:
                     pass
