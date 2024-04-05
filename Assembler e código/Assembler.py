@@ -15,7 +15,7 @@ registradores = {
     '£12': '1100',
     '£13': '1101',
     '£14': '1110',
-    '¢00': '1111'
+    '£15': '1111'
 
 }
 
@@ -109,8 +109,8 @@ def converteBinario(linha: str) -> str:
     saida = operadores[codigo[0]]
     if saida == operadores['soma'] or saida == operadores['subtrai'] or saida == operadores['multiplica']:
         saida += registradores[codigo[1]]
-        saida += registradores[codigo[2]]
         saida += registradores[codigo[3]]
+        saida += registradores[codigo[2]]
         saida += preenche_bits(16)
         tamanho = 4
     elif saida == operadores['maior'] or saida == operadores['igual'] or saida == operadores['menor']:

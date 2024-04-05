@@ -1,23 +1,64 @@
-instruções de arquitetura
-0 = soma // marcador_destino marcador_1 marcador_2 // marcador_1 + marcador_2.
-1 = diminuição // marcador_destino marcador_1 marcador_2 // marcador_1 - marcador_2.
-2 = pegar valor instantaneamente // marcador_destino número.
-3 = jump // valor do pulo.
-4 = multiplica // marcador_destino marcador_1 marcador_2 // marcador_1 * marcador_2.
-5 = se for maior pula // null marcador_1 marcador_2.
-6 = se for igual pula // null marcador_1 marcador_2.
-7 = se for menor pula // null marcador_1 marcador_2.
-8 = ler da memoria null valor posição // marcador_destino marcador_valor marcador_posição.
-9 = escrever li escrita posição // null marcador_valor marcador_posição.
-a = numero aleatorio // marcador_destino //gera um numero aleatorio entre 0 e 124
-b = bolha // não faz nada.
-c = soma com data_razard // marcador_destino null marcador_2 // soma com o resultado do comando anterior.
-d = multiplicação com data_razaed // marcador_destino null marcador_2 // multiplica com o resultado do comando anterior.
-e = MemRead data_razard // marcador_destino marcador_valor // pega o valor da ultima operação e coloca no marcador_posição.
-f = MemWrite data_razard guardar posição // null marcador_valor // pega o valor da ultima operação e coloca no marcador_posição.
+Algoritmo arestasNaoIncidentes(G, v, eh_digrafo):
 
-considerações:
-Instruções de salto: Para a efetuação de um salto em qualquer instrução use 3 bolhas.
-As instruções 5, 6 e 7: Essas inscrições so pulam para frente usando em consideração a posição que elas foram chamadas.
-Se nesesario usar um marcador rápido: Se e necessário usar um marcador rapidamente use as instruções data_razaed caso contrário bolhas serão necessárias.
-Organização do codigo: Pense bem na ordem que as instruções são chamadas isso pode reduzir as bolhas.
+	saida = 0
+	para i <- 1,..., n faça
+		para j <- 1,...,n faça
+			se i != v e j != v entao
+				se G[i][j] == 1 então
+					saida = saida + 1
+
+	se eh_digrafo entao
+		retorne saida
+	senao
+		retorne saida / 2
+
+//Complexidade O(n²)
+
+Algoritmo arestasNaoIncidentes(G, v, eh_digrafo):
+
+	saida = 0
+	para i <- 1,..., n faça
+		se i != v então
+			aux = G[i].prox
+			enquanto aux != null faça
+				se aux != v então
+					saida++
+				aux = aux.prox
+
+	se eh_digrafo então
+		retone saida
+	senão
+		retorne saida / 2
+
+//Complexidade O(n + m)
+
+
+Algoritmo grafoComplemento(G):
+	
+	cria uma matriz saida de adjacências;
+	para i <- 1,..., n faça
+		para j <- 1,..., n faça
+			se i != j então
+				se G[i][j] = 1 então
+					saida[i][j] <- 0;
+				senão
+					saida[i][j] <- 1;
+	retorne saida;
+
+Algoritmo grafoComplemento(G):
+	
+	cria uma lista de adjacências saida;
+	para i <- 1,..., n faça
+		para j <- 1,..., n faça
+			se i != j então
+				se !contem(G[i], j) então
+					saida[i].adciona(j);
+	retorne saida;
+
+Algoritmo contem(Lista, chave):
+	aux <- Lista.prox;
+	enquanto aux != null faça
+		se aux = chave então
+			retorne verdadeiro;
+		aux = aux.prox;
+	retorne falso;
