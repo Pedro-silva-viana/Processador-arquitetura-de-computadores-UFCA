@@ -119,10 +119,16 @@ def converteBinario(linha: str) -> str:
         saida += registradores[codigo[2]]
         saida += imediatoBinario(int(codigo[3]), 16)
         tamanho = 4
-    elif saida == operadores['ler'] or saida == operadores['somaFoda'] or saida == operadores['multiplicaFoda']:
+    elif saida == operadores['ler']:
         saida += registradores[codigo[1]]
         saida += '0000'
         saida += registradores[codigo[2]]
+        saida += preenche_bits(16)
+        tamanho = 3
+    elif saida == operadores['somaFoda'] or saida == operadores['multiplicaFoda']:
+        saida += registradores[codigo[1]]
+        saida += registradores[codigo[2]]
+        saida += '0000'
         saida += preenche_bits(16)
         tamanho = 3
     elif saida == operadores['fodaSe'] or saida == operadores['lerFoda']:
