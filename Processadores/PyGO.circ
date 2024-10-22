@@ -483,7 +483,6 @@
     <wire from="(630,610)" to="(650,610)"/>
     <wire from="(1030,580)" to="(1030,620)"/>
     <wire from="(1890,920)" to="(1900,920)"/>
-    <wire from="(100,1040)" to="(120,1040)"/>
     <wire from="(350,460)" to="(500,460)"/>
     <wire from="(860,830)" to="(890,830)"/>
     <wire from="(850,980)" to="(880,980)"/>
@@ -542,6 +541,7 @@
       <a name="width" val="32"/>
       <a name="label" val="R3D"/>
     </comp>
+    <comp lib="5" loc="(120,1040)" name="Button"/>
     <comp lib="0" loc="(1070,490)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="Jc"/>
@@ -1584,7 +1584,6 @@ c8800000 30000036 4*b0000000 49340000 c9600000 c9200000 f0800000 6560000
     <comp lib="0" loc="(120,980)" name="Tunnel">
       <a name="label" val="Inst reset"/>
     </comp>
-    <comp lib="5" loc="(100,1040)" name="Button"/>
     <comp lib="0" loc="(170,660)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="Clock"/>

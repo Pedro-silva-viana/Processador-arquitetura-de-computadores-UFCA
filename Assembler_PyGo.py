@@ -131,10 +131,6 @@ def converteBinario(linha: str, memoria: int) -> str:
         saida += imediatoBinario(int(codigo[3]), 16)
         tamanho = 4
     elif saida == operadores['ler']:
-
-        if memoria == 2:
-            raise SintaxError('Registrador inválido')
-
         saida += registradores[codigo[1]]
         saida += '0000'
         saida += registradores[codigo[2]]
@@ -150,14 +146,14 @@ def converteBinario(linha: str, memoria: int) -> str:
         saida += preenche_bits(16)
         tamanho = 3
     elif saida == operadores['fodaSe'] or saida == operadores['lerFoda']:
-
-        if saida == 'lerFoda' and memoria == 2:
-            raise SintaxError('Registrador inválido')
-
         saida += registradores[codigo[1]]
         saida += preenche_bits(24)
         tamanho = 2
     elif saida == operadores['escreverFoda']:
+
+        if memoria == 2:
+            raise SintaxError('Operação inválida')
+
         saida += '0000'
         saida += registradores[codigo[1]]
         saida += preenche_bits(20)
@@ -173,6 +169,10 @@ def converteBinario(linha: str, memoria: int) -> str:
         saida += imediatoBinario(int(codigo[2]), 24)
         tamanho = 3
     elif saida == operadores['escrever']:
+
+        if memoria == 2:
+            raise SintaxError('Operação inválida')
+
         saida += '0000'
         saida += registradores[codigo[1]]
         saida += registradores[codigo[2]]
