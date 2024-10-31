@@ -207,7 +207,7 @@ try:
         try:
             passou_aqui = 1
             while linha:
-                linha1, linha2 = linha.split('-')
+                linha1, linha2 = linha.split('_')
                 if linha1 != '\n' and linha1.replace(' ', '')[:2] != '//':
                     escrever1.write(converteHexa(converteBinario(linha1, 1)) + ' ')
                 passou_aqui = 2
