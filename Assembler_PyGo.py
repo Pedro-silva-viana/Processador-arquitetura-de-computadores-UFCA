@@ -109,6 +109,20 @@ def verifica_registrador(codigo: list, memoria: int):
         if int(registradores[codigo[1]], 2) < 8:
             raise SintaxError('Registrador inválido')
 
+def ajuste_registrador(codigo: list, memoria: int) -> str:
+    aux = ''
+    if memoria == 2:
+        aux = int(registradores[codigo[1]], 2)
+        aux -= 8
+        aux = bin(aux)
+        print(aux,end=' ')
+        aux = aux[2:]
+        aux = preenche_bits(4 - len(aux)) + aux
+    else:
+        aux = registradores[codigo[1]]
+    print(aux)
+    return aux
+
 def converteBinario(linha: str, memoria: int) -> str:
     codigo = linha.replace(',', '')
     codigo = codigo.replace('Â', '')
@@ -119,7 +133,7 @@ def converteBinario(linha: str, memoria: int) -> str:
 
         verifica_registrador(codigo, memoria)
 
-        saida += registradores[codigo[1]]
+        saida += ajuste_registrador(codigo, memoria)
         saida += registradores[codigo[3]]
         saida += registradores[codigo[2]]
         saida += preenche_bits(16)
@@ -140,7 +154,7 @@ def converteBinario(linha: str, memoria: int) -> str:
 
         verifica_registrador(codigo, memoria)
 
-        saida += registradores[codigo[1]]
+        saida += ajuste_registrador(codigo, memoria)
         saida += registradores[codigo[2]]
         saida += '0000'
         saida += preenche_bits(16)
@@ -165,7 +179,7 @@ def converteBinario(linha: str, memoria: int) -> str:
 
         verifica_registrador(codigo, memoria)
 
-        saida += registradores[codigo[1]]
+        saida += ajuste_registrador(codigo, memoria)
         saida += imediatoBinario(int(codigo[2]), 24)
         tamanho = 3
     elif saida == operadores['escrever']:
@@ -184,6 +198,7 @@ def converteBinario(linha: str, memoria: int) -> str:
 
     if tamanho < len(codigo):
         if codigo[tamanho][:2] != '//':
+            print('AHHHHHHHHHHH')
             raise SintaxError('Erro de sintaxe')
     
     return saida
