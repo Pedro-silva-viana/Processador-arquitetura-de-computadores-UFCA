@@ -21,22 +21,22 @@ registradores = {
 
 operadores = {
 
-    'soma': '0000',
-    'subtrai': '0001',
-    'pega': '0010',
-    'vai': '0011',
-    'multiplica': '0100',
-    'maior': '0101',
-    'igual': '0110',
-    'menor': '0111',
-    'ler': '1000',
-    'escrever': '1001',
-    'fodaSe': '1010',
-    'aMimir': '1011',
-    'somaFoda': '1100',
-    'multiplicaFoda': '1101',
-    'lerFoda': '1110',
-    'escreverFoda': '1111',
+    'add': '0000',
+    'sub': '0001',
+    'li': '0010',
+    'jump': '0011',
+    'mul': '0100',
+    'greater': '0101',
+    'equals': '0110',
+    'less': '0111',
+    'read': '1000',
+    'write': '1001',
+    'random': '1010',
+    'bubble': '1011',
+    'addH': '1100',
+    'mulH': '1101',
+    'readH': '1110',
+    'writeH': '1111',
 
 }
 
@@ -115,12 +115,10 @@ def ajuste_registrador(codigo: list, memoria: int) -> str:
         aux = int(registradores[codigo[1]], 2)
         aux -= 8
         aux = bin(aux)
-        print(aux,end=' ')
         aux = aux[2:]
         aux = preenche_bits(4 - len(aux)) + aux
     else:
         aux = registradores[codigo[1]]
-    print(aux)
     return aux
 
 def converteBinario(linha: str, memoria: int) -> str:
@@ -129,7 +127,7 @@ def converteBinario(linha: str, memoria: int) -> str:
     codigo = codigo.split()
 
     saida = operadores[codigo[0]]
-    if saida == operadores['soma'] or saida == operadores['subtrai'] or saida == operadores['multiplica']:
+    if saida == operadores['add'] or saida == operadores['sub'] or saida == operadores['mul']:
 
         verifica_registrador(codigo, memoria)
 
@@ -138,19 +136,19 @@ def converteBinario(linha: str, memoria: int) -> str:
         saida += registradores[codigo[2]]
         saida += preenche_bits(16)
         tamanho = 4
-    elif saida == operadores['maior'] or saida == operadores['igual'] or saida == operadores['menor']:
+    elif saida == operadores['greater'] or saida == operadores['equals'] or saida == operadores['less']:
         saida += '0000'
         saida += registradores[codigo[1]]
         saida += registradores[codigo[2]]
         saida += imediatoBinario(int(codigo[3]), 16)
         tamanho = 4
-    elif saida == operadores['ler']:
+    elif saida == operadores['read']:
         saida += registradores[codigo[1]]
         saida += '0000'
         saida += registradores[codigo[2]]
         saida += preenche_bits(16)
         tamanho = 3
-    elif saida == operadores['somaFoda'] or saida == operadores['multiplicaFoda']:
+    elif saida == operadores['addH'] or saida == operadores['mulH']:
 
         verifica_registrador(codigo, memoria)
 
@@ -159,11 +157,11 @@ def converteBinario(linha: str, memoria: int) -> str:
         saida += '0000'
         saida += preenche_bits(16)
         tamanho = 3
-    elif saida == operadores['fodaSe'] or saida == operadores['lerFoda']:
+    elif saida == operadores['random'] or saida == operadores['readH']:
         saida += registradores[codigo[1]]
         saida += preenche_bits(24)
         tamanho = 2
-    elif saida == operadores['escreverFoda']:
+    elif saida == operadores['writeH']:
 
         if memoria == 2:
             raise SintaxError('Operação inválida')
@@ -172,17 +170,17 @@ def converteBinario(linha: str, memoria: int) -> str:
         saida += registradores[codigo[1]]
         saida += preenche_bits(20)
         tamanho = 2
-    elif saida == operadores['vai']:
+    elif saida == operadores['jump']:
         saida += imediatoBinario(int(codigo[1]), 28)
         tamanho = 2
-    elif saida == operadores['pega']:
+    elif saida == operadores['li']:
 
         verifica_registrador(codigo, memoria)
 
         saida += ajuste_registrador(codigo, memoria)
         saida += imediatoBinario(int(codigo[2]), 24)
         tamanho = 3
-    elif saida == operadores['escrever']:
+    elif saida == operadores['write']:
 
         if memoria == 2:
             raise SintaxError('Operação inválida')
@@ -198,7 +196,6 @@ def converteBinario(linha: str, memoria: int) -> str:
 
     if tamanho < len(codigo):
         if codigo[tamanho][:2] != '//':
-            print('AHHHHHHHHHHH')
             raise SintaxError('Erro de sintaxe')
     
     return saida
@@ -211,25 +208,25 @@ saida = saida.replace('\\', '\\\\')
 saida = saida.split('.')
 
 try:
-    with open(entrada, 'r') as ler:
-        linha = ler.readline()
+    with open(entrada, 'r') as read:
+        linha = read.readline()
         i = 1
-        escrever1 = open(saida[0] + '_1.' + saida[1], 'w')
-        escrever2 = open(saida[0] + '_2.' + saida[1], 'w')
+        write1 = open(saida[0] + '_1.' + saida[1], 'w')
+        write2 = open(saida[0] + '_2.' + saida[1], 'w')
                         
-        escrever1.write('v2.0 raw\n')
-        escrever2.write('v2.0 raw\n')
+        write1.write('v2.0 raw\n')
+        write2.write('v2.0 raw\n')
         try:
             passou_aqui = 1
             while linha:
                 linha1, linha2 = linha.split('_')
                 if linha1 != '\n' and linha1.replace(' ', '')[:2] != '//':
-                    escrever1.write(converteHexa(converteBinario(linha1, 1)) + ' ')
+                    write1.write(converteHexa(converteBinario(linha1, 1)) + ' ')
                 passou_aqui = 2
                 if linha2 != '\n' and linha2.replace(' ', '')[:2] != '//':
-                    escrever2.write(converteHexa(converteBinario(linha2, 2)) + ' ')
+                    write2.write(converteHexa(converteBinario(linha2, 2)) + ' ')
 
-                linha = ler.readline()
+                linha = read.readline()
                 i += 1
 
             print("Arquivo escrito com sucesso!!")
@@ -243,15 +240,15 @@ try:
                 linha2 = linha2.replace('Â', '')
                 print(f'Erro de sintaxe na linha {i}: \'{linha1}-\033[31m{linha2}\033[0m\'.')
                 
-            escrever1.close()
-            escrever2.close()
-            with open(saida[0] + '_1.' + saida[1], 'w') as escrever:
+            write1.close()
+            write2.close()
+            with open(saida[0] + '_1.' + saida[1], 'w') as write:
                 pass
-            with open(saida[0] + '_2.' + saida[1], 'w') as escrever:
+            with open(saida[0] + '_2.' + saida[1], 'w') as write:
                 pass
                 
-        escrever1.close()
-        escrever2.close()
-        ler.close()
+        write1.close()
+        write2.close()
+        read.close()
 except FileNotFoundError:
     print('Arquivo de entrada não encontrado ou inexistente.')
